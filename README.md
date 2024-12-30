@@ -25,4 +25,4 @@ Determina se o personagem atingiu uma parede do labirinto, impedindo movimentos 
 Classe responsável por gerenciar as ações e comportamentos do personagem principal.
 
 #### calcular 
-  *determinar os movimentos possiveis que o personagem pode realizar*
+*determinar os movimentos possiveis que o personagem pode realizar*
