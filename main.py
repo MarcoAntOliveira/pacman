@@ -1,5 +1,5 @@
 import random
-import pygame #type: ignore
+import pygame 
 
 AMARELO = (255, 255, 0)
 PRETO = (0, 0, 0)
@@ -8,7 +8,7 @@ AZUL = (0, 0, 255)
 
 class Cenario:
     def __init__(self, tamanho, pac) -> None:
-        self.pacman = pac
+        self.pacman = pacman
         self.tamanho = tamanho
         self.matriz = self.maze()
     def pintar_coluna(self, tela, numero_linha, linha):
@@ -31,7 +31,7 @@ class Cenario:
         # Dimensões do labirinto
         width, height = 40, 30
         
-        # Matriz do labirinto: 2 representa parede, 0 representa caminho livre
+        # Matriz do labirinto: 2 representa parede, 0 rep, resenta caminho livre
         maze = [[0 for _ in range(width)] for _ in range(height)]
         
         # Criar bordas do labirinto
@@ -111,11 +111,18 @@ class Pacman:
         self.linha_intencao = self.linha 
 
     def calcular_regras(self):
-        self.coluna_intencao = self.coluna + self.vel_x
-        self.linha_intencao= self.linha + self.vel_y
+        col = int(self.coluna_intencao)
+        lin = int(self.linha_intencao)
+        if 0 <= col < len(self.matriz[0]) and 0 <= lin < len(self.matriz):
+            if self.matriz[lin][col] != 2:
+                self.pacman.aceitar_movimento()
 
-        self.centro_x = int(self.coluna*self.tamanho + self.raio)
-        self.centro_y = int(self.linha*self.tamanho + self.raio)
+    # def calcular_regras(self):
+    #     self.coluna_intencao = self.coluna + self.vel_x
+    #     self.linha_intencao= self.linha + self.vel_y
+
+    #     self.centro_x = int(self.coluna*self.tamanho + self.raio)
+    #     self.centro_y = int(self.linha*self.tamanho + self.raio)
 
         
     
@@ -135,28 +142,28 @@ class Pacman:
         olho_raio = int(self.raio/10)
         pygame.draw.circle(tela, PRETO, (olho_x, olho_y), olho_raio, 0)
 
-    def processar_eventos(self, eventos):
-        for e in eventos:
-            if e.type == pygame.KEYDOWN:
-                if e.key  == pygame.K_RIGHT:
-                    self.vel_x = VELOCIDADE
-                elif e.key  == pygame.K_LEFT:
-                    self.vel_x = -VELOCIDADE   
-                elif e.key  == pygame.K_DOWN:
-                    self.vel_y = VELOCIDADE
-                elif e.key  == pygame.K_UP:
-                    self.vel_y = -VELOCIDADE     
+    # def processar_eventos(self, eventos):
+    #     for e in eventos:
+    #         if e.type == pygame.KEYDOWN:
+    #             if e.key  == pygame.K_RIGHT:
+    #                 self.vel_x = VELOCIDADE
+    #             elif e.key  == pygame.K_LEFT:
+    #                 self.vel_x = -VELOCIDADE   
+    #             elif e.key  == pygame.K_DOWN:
+    #                 self.vel_y = VELOCIDADE
+    #             elif e.key  == pygame.K_UP:
+    #                 self.vel_y = -VELOCIDADE     
 
 
-            elif e.type == pygame.KEYUP:
-                if e.key == pygame.K_RIGHT:
-                    self.vel_x = 0    
-                elif e.key == pygame.K_LEFT:
-                    self.vel_x = 0  
-                elif e.key == pygame.K_DOWN:
-                    self.vel_y = 0    
-                elif e.key == pygame.K_UP:
-                    self.vel_y = 0       
+    #         elif e.type == pygame.KEYUP:
+    #             if e.key == pygame.K_RIGHT:
+    #                 self.vel_x = 0    
+    #             elif e.key == pygame.K_LEFT:
+    #                 self.vel_x = 0  
+    #             elif e.key == pygame.K_DOWN:
+    #                 self.vel_y = 0    
+    #             elif e.key == pygame.K_UP:
+    #                 self.vel_y = 0       
     def aceitar_movimento(self):
         self.linha = self.linha_intencao
         self.coluna = self.coluna_intencao 
@@ -167,6 +174,20 @@ class Pacman:
                 mouse_x, mouse_y = e.pos
                 self.coluna = (mouse_x - self.centro_x) / delay
                 self.linha = (mouse_y - self.centro_y) / delay
+
+
+    def aceitar_movimento(self):
+        self.linha = int(self.linha_intencao)
+        self.coluna = int(self.coluna_intencao)
+
+    def processar_eventos_mouse(self, eventos):
+        delay = 100
+        for e in eventos:
+            if e.type == pygame.MOUSEMOTION:
+                mouse_x, mouse_y = e.pos
+                self.coluna = int((mouse_x - self.centro_x) / delay)
+                self.linha = int((mouse_y - self.centro_y) / delay)
+
 
 
 pygame.init()
